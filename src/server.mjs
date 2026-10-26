@@ -30,7 +30,7 @@ export function makeServer({github=getGitHubMetadata}={}) {
         catch(error) {return json(res,503,{error:'github_unavailable',detail:String(error.message).slice(0,120)});}
       }
       const mapped=u.pathname==='/'?'/index.html':u.pathname;
-      if(!['/index.html','/app.js','/favorites.js','/styles.css','/favicon.svg'].includes(mapped)) return json(res,404,{error:'not_found'});
+      if(!['/index.html','/app.js','/favorites.js','/evidence.js','/styles.css','/favicon.svg'].includes(mapped)) return json(res,404,{error:'not_found'});
       const target=path.join(publicRoot,mapped.slice(1));
       const body=await readFile(target);
       const s=await stat(target);
