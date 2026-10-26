@@ -137,13 +137,13 @@ export const verifyCatalog = (entries = software) => {
       projectIds.add(project.id);
       if (!project.name?.trim() || !project.summary?.trim()) problems.push('Missing project identity '+project.id);
       if (!['rebuild','alternative'].includes(project.mode)) problems.push('Invalid project mode '+project.id);
-      if (!/^[\\w.-]+\/[\\w.-]+$/.test(project.repository || '')) problems.push('Invalid repository '+project.id);
+      if (!/^[\w.-]+\/[\w.-]+$/.test(project.repository || '')) problems.push('Invalid repository '+project.id);
       if (appRepositories.has(project.repository)) problems.push('Duplicate repository on app '+project.id);
       appRepositories.add(project.repository);
       if (project.evidence?.url !== `https://github.com/${project.repository}` || project.evidence?.type !== 'repository') {
         problems.push('Missing or mismatched source '+project.id);
       }
-      if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(project.lastReviewed || '') ||
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(project.lastReviewed || '') ||
           Number.isNaN(Date.parse(project.lastReviewed))) problems.push('Invalid review date '+project.id);
       const seen = new Set();
       if (!Array.isArray(project.features)) { problems.push('Invalid project features '+project.id); continue; }
