@@ -36,6 +36,18 @@ Le site fournit une recherche, des filtres, des fiches logiciels, une matrice de
 
 **À réaliser :** audit manuel des revendications et licences, navigation de bout en bout en conditions proches de la production, déploiement public, protocole de contribution, observations vérifiables, import contrôlé depuis Mobile Explorer. Voir [roadmap V1](https://github.com/memolabs-dev/rebuild-radar/issues/4).
 
+
+
+## Aperçus vérifiés (26 octobre 2026)
+
+Parcours de navigation automatisé testé en navigateur sur ordinateur et à 390 px de largeur mobile : recherche, fiche Excel, matrice de capacités, page Méthode et absence de débordement horizontal. Ces captures ne valident **pas** le déploiement public ni les fonctionnalités des logiciels externes.
+
+![Accueil Rebuild Radar — desktop](docs/assets/radar-desktop.png)
+
+![Accueil Rebuild Radar — mobile](docs/assets/radar-mobile.png)
+
+[Audit initial des dépôts référencés](docs/SOURCE_AUDIT_2026-10-26.md) · `npm run audit:repositories` pour recontrôler l'accessibilité des dépôts GitHub.
+
 ## Pour contribuer
 
 Consultez [CONTRIBUTING.md](CONTRIBUTING.md). Une correction de capacité doit citer sa source et ne doit jamais promouvoir automatiquement un état en « vérifié ».
