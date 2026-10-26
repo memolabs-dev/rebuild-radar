@@ -1,39 +1,47 @@
 # Rebuild Radar
 
-> Le radar indépendant des alternatives et reconstructions open source. Inspiration UX : [Gratos.app](https://gratos.app/), avec un objectif distinct : la **preuve de compatibilité**, pas uniquement la découverte.
+[![Verify](https://github.com/memolabs-dev/rebuild-radar/actions/workflows/ci.yml/badge.svg)](https://github.com/memolabs-dev/rebuild-radar/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**État : prototype local, pas de déploiement public.**
+Un observatoire indépendant des **reconstructions de logiciels** et des **alternatives open source** : quelles capacités sont annoncées, documentées, partiellement prises en charge ou encore inconnues ?
 
-## Démarrer
+> **Statut : MVP / démonstrateur local.** Le dépôt est public, mais aucun site public de production n'est confirmé. Les affirmations de capacité sont un inventaire éditorial, **pas des benchmarks indépendants**. Il n'existe aucun pourcentage de compatibilité vérifié.
 
-Node.js 20+ uniquement, **aucune dépendance à installer** :
+## Essayer localement
+
+Prérequis : Node.js 20 ou plus récent. Aucune dépendance externe à installer.
 
 ```bash
-npm start       # http://127.0.0.1:3000
-npm test
+git clone https://github.com/memolabs-dev/rebuild-radar.git
+cd rebuild-radar
 npm run check
+npm test
+npm start
+# Ouvrir http://127.0.0.1:3000
 ```
 
-## Ce qui fonctionne
+Le site fournit une recherche, des filtres, des fiches logiciels, une matrice de capacités et un accès aux dépôts sources. Les métadonnées GitHub sont interrogées via une API côté serveur avec allowlist et cache ; les erreurs et limites de l'API peuvent rendre cette activité indisponible. Les favoris sont stockés uniquement dans le navigateur.
 
-Recherche instantanée, filtres, 10 fiches propriétaires, 18+ projets, matrice de capacités attribuées aux projets, métadonnées GitHub en direct (lorsque l'API répond), favoris locaux, API HTTP en lecture seule.
+## Comprendre les données
 
-Ce qui **n'est pas encore fait** : déploiement, collecte automatisée multi-source, audits de compatibilité indépendants, notifications, connexion à Mobile Explorer, base PostgreSQL. Les statuts de l'inventaire initial nécessitent une revue humaine avant communication comme état actuel d'un produit.
+- **Reconstruction** : projet cherchant à recréer des comportements d'un logiciel. **Alternative** : produit indépendant couvrant des usages similaires.
+- **Déclaré** : capacité annoncée par le projet. **Documenté** : capacité présentée dans sa documentation. **Partiel** : limitations signalées. **Inconnu** : information insuffisante.
+- **Vérifié** : réservé à des tests reproductibles avec protocole et artefacts. **Aucune fonctionnalité du catalogue initial n'est actuellement vérifiée indépendamment.**
+- Les étoiles, commits et dates GitHub mesurent l'activité, jamais la compatibilité. Un lien de dépôt valide ne vérifie pas les revendications du projet.
+- Le champ de date existant est celui de l'inventaire éditorial initial du 16 octobre 2026 ; il ne garantit pas une revue externe récente.
 
-## Documentation
+## État de la feuille de route
 
-- [PRD](docs/PRD.md)
-- [TRD](docs/TRD.md)
-- [Spécifications](specs/FEATURES.md)
-- [Backlog](specs/TASKS.md)
+**MVP présent :** 10 logiciels, catalogue éditorial, moteur de recherche, fiches et API HTTP en lecture seule, tests Node. Les 19 entrées projet référencées dans les données ne sont pas toutes validées individuellement.
 
-## Sources & limites
+**À réaliser :** audit manuel des revendications et licences, navigation de bout en bout en conditions proches de la production, déploiement public, protocole de contribution, observations vérifiables, import contrôlé depuis Mobile Explorer. Voir [roadmap V1](https://github.com/memolabs-dev/rebuild-radar/issues/4).
 
-Chaque projet est relié à son dépôt. Les revendications de fonctionnalité ne sont pas des benchmarks indépendants ; voir `/methode` depuis l'interface. Aucune association commerciale avec Adobe, Microsoft, Figma, Autodesk, etc.
+## Pour contribuer
 
-MIT. Projet préparé pour Memo Labs ; dépôt distant à créer.
+Consultez [CONTRIBUTING.md](CONTRIBUTING.md). Une correction de capacité doit citer sa source et ne doit jamais promouvoir automatiquement un état en « vérifié ».
 
-## Captures de validation
+Documentation : [PRD](docs/PRD.md) · [TRD](docs/TRD.md) · [Fonctionnalités](specs/FEATURES.md) · [Backlog](specs/TASKS.md).
 
-- `preview-desktop.png` — validation Chromium isolée, données de catalogue injectées localement.
-- `preview-mobile.png` — contrôle responsive 390px, aucun débordement détecté.
+Ce projet n'est affilié ni à Adobe, ni à Microsoft, ni aux autres éditeurs ou projets référencés. Il n'utilise ni ne redistribue leurs actifs propriétaires.
+
+Licence : [MIT](LICENSE) © 2026 Memo Labs.
