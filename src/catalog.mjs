@@ -110,17 +110,53 @@ export const software = [
 export const projectCount = software.reduce((n,s)=>n+s.projects.length,0);
 export const findSoftware = slug => software.find(x=>x.slug===slug);
 export const allProjects = software.flatMap(s=>s.projects.map(p=>({...p, software: s.name, softwareSlug: s.slug})));
-export const verifyCatalog = () => {
+// Structural checks only. They do not independently validate repository existence,
+ // feature claims, current licenses or real-world compatibility.
+export const verifyCatalog = (entries = software) => {
   const problems = [];
   const slugs = new Set();
-  for (const app of software) {
-    if(slugs.has(app.slug)) problems.push('Duplicate software '+app.slug);
+  const projectIds = new Set();
+  const allowedStatuses = new Set(['declared','documented','partial','verified','unknown']);
+  const knownCategories = new Set(categories.map(category => category.id));
+  for (const app of entries) {
+    if (!app.slug || slugs.has(app.slug)) problems.push('Duplicate or missing software slug '+app.slug);
     slugs.add(app.slug);
-    if(!app.features?.length || !app.projects?.length) problems.push('Empty app '+app.slug);
-    for(const project of app.projects) {
-      if(!/^[\w.-]+\/[\w.-]+$/.test(project.repository)) problems.push('Invalid repository '+project.id);
-      if(!project.evidence?.url || !project.lastReviewed) problems.push('Missing source '+project.id);
-      if(project.features?.some(f=>!['declared','documented','partial','verified','unknown'].includes(f[1]))) problems.push('Bad evidence '+project.id);
+    if (!knownCategories.has(app.category) || app.category === 'all') problems.push('Invalid category '+app.slug);
+    if (!app.name?.trim() || !app.maker?.trim()) problems.push('Missing software identity '+app.slug);
+    if (!Array.isArray(app.features) || !app.features.length || !Array.isArray(app.projects) || !app.projects.length) {
+      problems.push('Empty app '+app.slug);
+      continue;
+    }
+    const featureNames = new Set(app.features);
+    if (featureNames.size !== app.features.length || [...featureNames].some(name => !name?.trim())) {
+      problems.push('Duplicate or empty software feature '+app.slug);
+    }
+    const appRepositories = new Set();
+    for (const project of app.projects) {
+      if (!project.id || projectIds.has(project.id)) problems.push('Duplicate project ID '+project.id);
+      projectIds.add(project.id);
+      if (!project.name?.trim() || !project.summary?.trim()) problems.push('Missing project identity '+project.id);
+      if (!['rebuild','alternative'].includes(project.mode)) problems.push('Invalid project mode '+project.id);
+      if (!/^[\\w.-]+\/[\\w.-]+$/.test(project.repository || '')) problems.push('Invalid repository '+project.id);
+      if (appRepositories.has(project.repository)) problems.push('Duplicate repository on app '+project.id);
+      appRepositories.add(project.repository);
+      if (project.evidence?.url !== `https://github.com/${project.repository}` || project.evidence?.type !== 'repository') {
+        problems.push('Missing or mismatched source '+project.id);
+      }
+      if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(project.lastReviewed || '') ||
+          Number.isNaN(Date.parse(project.lastReviewed))) problems.push('Invalid review date '+project.id);
+      const seen = new Set();
+      if (!Array.isArray(project.features)) { problems.push('Invalid project features '+project.id); continue; }
+      for (const [feature,status] of project.features) {
+        if (seen.has(feature)) problems.push('Duplicate feature claim '+project.id+':'+feature);
+        seen.add(feature);
+        if (!featureNames.has(feature)) problems.push('Unlisted feature claim '+project.id+':'+feature);
+        if (!allowedStatuses.has(status)) problems.push('Bad evidence '+project.id);
+        // A repository URL cannot by itself support an independently verified claim.
+        if (status === 'verified' && project.evidence?.level === 'source-declared') {
+          problems.push('Unsupported verified claim '+project.id+':'+feature);
+        }
+      }
     }
   }
   return problems;
