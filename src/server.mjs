@@ -41,5 +41,5 @@ export function makeServer({github=getGitHubMetadata}={}) {
 }
 if(process.argv[1] && path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
  const port=Number(process.env.PORT)||3000;
- makeServer().listen(port,'127.0.0.1',()=>console.log(`Rebuild Radar: http://127.0.0.1:${port}`));
+ makeServer().listen(port,process.env.HOST || '127.0.0.1',()=>console.log(`Rebuild Radar: http://127.0.0.1:${port}`));
 }
