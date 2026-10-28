@@ -9,7 +9,10 @@
     "dev": "node --watch src/server.mjs",
     "test": "node --test tests/*.test.mjs",
     "check": "node --check src/server.mjs && node --check src/catalog.mjs && node --check src/github.mjs && node --check public/app.js && node --check scripts/audit-repositories.mjs && node --check public/evidence.js",
-    "audit:repositories": "node scripts/audit-repositories.mjs"
+    "audit:repositories": "node scripts/audit-repositories.mjs",
+    "prepare": "sh scripts/install-git-hooks.sh",
+    "hooks:install": "sh scripts/install-git-hooks.sh",
+    "check:staged": "npm run check"
   },
   "engines": {
     "node": ">=20"
